@@ -30,9 +30,11 @@ class GUI(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
         pass
 
-    def showMessage(self, message):
+    def showMessage(self, message, type="info", detailedText="") -> object:
         """
         Отображение информационного сообщения
+        type = info || error - тип сообщения
+        detailedText - доп.текст для вывода информации об ошибке
         """
 
         if message == "" :
@@ -43,7 +45,29 @@ class GUI(QtWidgets.QMainWindow, design.Ui_MainWindow):
             msg.setStandardButtons(QMessageBox.Ok)
             msg.exec_()
             return -1
-        else:
-            self.textEdit.append(" " + datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " : " +  message + " ;"); 
+
+        try:
+            if type == "info" :
+                self.textEdit.append(" " + datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " : INFO : " + message + " ;"); 
+            elif type == "error" :
+                if detailedText == "" :
+                    self.textEdit.append(" " + datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " : ERROR : " + message + " ;")
+                else :
+                    self.textEdit.append(" " + datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " : ERROR : " + message + " : " + detailedText + " ;")
+            else :
+                if detailedText == "" :
+                    self.textEdit.append(" " + datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " : неопределенный тип сообщения : " + message + " ;")
+                else :
+                    self.textEdit.append(" " + datetime.now().strftime('%Y-%m-%d %H:%M:%S') + " : неопределенный тип сообщения : " + message + " : " + detailedText + " ;")
+        except Exception as e :
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Critical)
+            msg.setText("Ошибка вывода сообщения, метод showMessage, класс GUI приложения " + const.project_name + " !")
+            msg.setWindowTitle(const.critical_info_message_label)
+            msg.setDetailedText(str(e))
+            msg.setStandardButtons(QMessageBox.Ok)
+            msg.exec_()
+
+            return -1
 
 
