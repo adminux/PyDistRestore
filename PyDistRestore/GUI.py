@@ -23,6 +23,8 @@ class GUI(QtWidgets.QMainWindow, design.Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
 
+        self.setWindowIcon(QtGui.QIcon('resources//main_form.ico'))
+
     def __del__(self)-> None:
         """
         Деструктор класса
